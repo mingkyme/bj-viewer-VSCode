@@ -14,7 +14,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				if (fileName) {
 					let bjNumber = +fileName;
 					if (!isNaN(bjNumber)) {
-						vscode.window.showInformationMessage(fileName);
 						if(!panel){
 							vscode.window.showInformationMessage("Here");
 							panel = vscode.window.createWebviewPanel('BJ','BJ',vscode.ViewColumn.Two);
