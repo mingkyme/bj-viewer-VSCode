@@ -3,7 +3,7 @@
 	"displayName": "BJ Viewer",
 	"publisher": "MINGKYME",
 	"description": "해당 문제의 BJ 페이지를 열어 줍니다.",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"repository": "https://github.com/mingkyme/bj-viewer-VSCode",
 	"icon": "images/icon.png",
 	"engines": {
@@ -13,8 +13,9 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:bj-viewer.open",
-		"onLanguage:typescript"
+		"onLanguage:javascript",
+		"onLanguage:typescript",
+		"onLanguage:python"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
