@@ -1,26 +1,36 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
+import path = require('path');
 import * as vscode from 'vscode';
+import * as request from 'request';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "bj-viewer" is now active!');
+// this method is called when your extension is deactivated
+export function deactivate() { }
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('bj-viewer.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from BJ Viewer!');
+export async function activate(context: vscode.ExtensionContext) {
+
+	let disposable = vscode.commands.registerCommand('bj-viewer.open', () => {
+		if (vscode.window.activeTextEditor) {
+			var fileName = path.basename(vscode.window.activeTextEditor.document.fileName).split('.')[0];
+			let bjNumber = +fileName;
+			if (!isNaN(bjNumber)) {
+				vscode.window.showInformationMessage(bjNumber.toString());
+				const panel = vscode.window.createWebviewPanel(
+					'BJ',
+					`BJ ${bjNumber}`,
+					vscode.ViewColumn.Two,
+					{}
+				);
+				request.get("https://www.acmicpc.net/problem/" + bjNumber, (err, res) => {
+					if (err) {
+						vscode.window.showErrorMessage("Unknown Error");
+						console.log(err);
+						panel.dispose();
+					}
+					panel.webview.html = res.body;
+				});
+			}
+		}
 	});
 
 	context.subscriptions.push(disposable);
-}
 
-// this method is called when your extension is deactivated
-export function deactivate() {}
+}
